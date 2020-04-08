@@ -11,11 +11,11 @@ type PropertyMismatch =
     | AdditionalProperty of string
 
 type DiffPoint =
-    {
-        Path : string
-        Left : JsonElement
-        Right : JsonElement
-    }
+        {
+            Path : string
+            Left : JsonElement
+            Right : JsonElement
+        }
 
 type Diff =
     | Kind of DiffPoint
@@ -23,12 +23,12 @@ type Diff =
     | Properties of (DiffPoint * PropertyMismatch list)
     | ItemCount of (DiffPoint)
     
-    member x.Path =
-        match x with
-        | Kind pt -> pt.Path
-        | Value pt -> pt.Path
-        | Properties (pt, _) -> pt.Path
-        | ItemCount pt -> pt.Path
+        member x.Path =
+            match x with
+            | Kind pt -> pt.Path
+            | Value pt -> pt.Path
+            | Properties (pt, _) -> pt.Path
+            | ItemCount pt -> pt.Path
 
 module JsonDiff =
 
@@ -117,12 +117,8 @@ module JsonDiff =
     
     let OfElements(e1 : JsonElement, e2 : JsonElement) : IEnumerable<Diff> = 
         findDiff [] e1 e2 |> List.toSeq
-
+        
     let OfDocuments(d1 : JsonDocument, d2 : JsonDocument) : IEnumerable<Diff> = 
         OfElements(d1.RootElement, d2.RootElement)
 
-    let OfStrings(s1 : string, s2 : string) : IEnumerable<Diff> = 
-        use d1 = JsonDocument.Parse(s1)
-        use d2 = JsonDocument.Parse(s2) 
-        OfDocuments(d1, d2)
-
+        

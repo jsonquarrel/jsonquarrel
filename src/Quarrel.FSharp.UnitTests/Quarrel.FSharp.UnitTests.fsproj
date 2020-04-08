@@ -4,7 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Tests.fs" />
+    <Compile Include="JsonDiffTests.fs" />
+    <Compile Include="JsonStringsTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Quarrel\Quarrel.fsproj" />

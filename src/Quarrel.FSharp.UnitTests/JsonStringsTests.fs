@@ -6,9 +6,24 @@ module JsonStringsTests =
     open Quarrel
 
     [<Fact>]
-    let ``true vs false``() = 
-        let diffMessage = JsonStrings.Diff("true", "false") |> Seq.head
-        Assert.Equal("Boolean value mismatch at $.\nExpected false but was true.", diffMessage)
+    let ``true vs true``() = 
+        let diffs = JsonStrings.Diff("true", "true")
+        Assert.Empty(diffs)
+
+    [<Fact>]
+    let ``false vs false``() = 
+        let diffs = JsonStrings.Diff("false", "false")
+        Assert.Empty(diffs)
+
+    [<Fact>]
+    let ``0 vs 0``() = 
+        let diffs = JsonStrings.Diff("0", "0")
+        Assert.Empty(diffs)
+
+    [<Fact(Skip="Don't know about this.")>]
+    let ``0 vs -0``() = 
+        let diffs = JsonStrings.Diff("0", "-0")
+        Assert.Empty(diffs)
 
     [<Fact>]
     let ``1 vs 2``() = 
@@ -49,8 +64,10 @@ module JsonStringsTests =
 
     [<Fact>]
     let ``[ 1 ] vs [ 2, 1 ]``() = 
-        let diffMessage = JsonStrings.Diff("[ 1 ]", "[ 2, 1 ]") |> Seq.head
-        Assert.Equal("Array length mismatch at $.\nExpected 2 items but was 1.", diffMessage)
+        let diffs = JsonStrings.Diff("[ 1 ]", "[ 2, 1 ]") |> Seq.toList
+        match diffs with
+        | [ diffMessage ] -> Assert.Equal("Array length mismatch at $.\nExpected 2 items but was 1.", diffMessage)
+        | _ -> failwith "Wrong number of diffs"
             
     [<Fact>]
     let ``[ 2, 1 ] vs [ 1, 2 ]``() =

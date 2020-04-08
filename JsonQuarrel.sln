@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "paket", "paket", "{FD19C014
 		paket.lock = paket.lock
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quarrel.CSharp.UnitTests", "src\Quarrel.CSharp.UnitTests\Quarrel.CSharp.UnitTests.csproj", "{CF5AA947-F3D7-4591-8ED4-47CD7A1581EE}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Quarrel.FSharp.UnitTests", "src\Quarrel.FSharp.UnitTests\Quarrel.FSharp.UnitTests.fsproj", "{FA0C9F7F-BEA5-4E25-81DA-93B15CED49F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{B7729F25-CB39-4699-922D-84232BD7C8BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7729F25-CB39-4699-922D-84232BD7C8BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7729F25-CB39-4699-922D-84232BD7C8BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF5AA947-F3D7-4591-8ED4-47CD7A1581EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF5AA947-F3D7-4591-8ED4-47CD7A1581EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF5AA947-F3D7-4591-8ED4-47CD7A1581EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF5AA947-F3D7-4591-8ED4-47CD7A1581EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA0C9F7F-BEA5-4E25-81DA-93B15CED49F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA0C9F7F-BEA5-4E25-81DA-93B15CED49F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA0C9F7F-BEA5-4E25-81DA-93B15CED49F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA0C9F7F-BEA5-4E25-81DA-93B15CED49F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

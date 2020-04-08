@@ -26,7 +26,7 @@ namespace Quarrel.CSharp.UnitTests
         {
             var diffMessages = JsonStrings.Diff("null", "false");
             var diffMessage = diffMessages.Single();
-            Assert.Equal("Value mismatch at $.\nExpected the boolean false but was null.", diffMessage);
+            Assert.Equal("Kind mismatch at $.\nExpected the boolean false but was null.", diffMessage);
         }
         
         [Fact]
@@ -34,7 +34,7 @@ namespace Quarrel.CSharp.UnitTests
         {
             var diffMessages = JsonStrings.Diff("false", "null");
             var diffMessage = diffMessages.Single();
-            Assert.Equal("Value mismatch at $.\nExpected null but was the boolean false.", diffMessage);
+            Assert.Equal("Kind mismatch at $.\nExpected null but was the boolean false.", diffMessage);
         }
         
         [Fact]
@@ -42,15 +42,31 @@ namespace Quarrel.CSharp.UnitTests
         {
             var diffMessages = JsonStrings.Diff("false", "0");
             var diffMessage = diffMessages.Single();
-            Assert.Equal("Value mismatch at $.\nExpected the number 0 but was the boolean false.", diffMessage);
+            Assert.Equal("Kind mismatch at $.\nExpected the number 0 but was the boolean false.", diffMessage);
         }
 
         [Fact]
-        public void TestDiffZeroVsOne()
+        public void TestDiffOneVsTrue()
         {
             var diffMessages = JsonStrings.Diff("1", "true");
             var diffMessage = diffMessages.Single();
-            Assert.Equal("Value mismatch at $.\nExpected the boolean true but was the number 1.", diffMessage);
+            Assert.Equal("Kind mismatch at $.\nExpected the boolean true but was the number 1.", diffMessage);
+        }
+        
+        [Fact]
+        public void TestDiffEmptyArrayVsOne()
+        {
+            var diffMessages = JsonStrings.Diff("[]", "1");
+            var diffMessage = diffMessages.Single();
+            Assert.Equal("Kind mismatch at $.\nExpected the number 1 but was an array with 0 items.", diffMessage);
+        }
+        
+        [Fact]
+        public void TestDiffArrayOfOneElementVsOne()
+        {
+            var diffMessages = JsonStrings.Diff("[ 1 ]", "1");
+            var diffMessage = diffMessages.Single();
+            Assert.Equal("Kind mismatch at $.\nExpected the number 1 but was an array with 1 item.", diffMessage);
         }
     }
 }

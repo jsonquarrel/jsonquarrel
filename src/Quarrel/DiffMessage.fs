@@ -10,7 +10,10 @@ module DiffMessage =
         | JsonValueKind.False -> "the boolean false"
         | JsonValueKind.String -> sprintf "the string %s" (e.GetString())
         | JsonValueKind.Number -> sprintf "the number %s" (e.GetRawText())
-        | JsonValueKind.Array -> sprintf "an array with %i items" (e.GetArrayLength())
+        | JsonValueKind.Array ->
+            let itemCount = e.GetArrayLength()
+            let itemsText = if itemCount = 1 then "item" else "items"
+            sprintf "an array with %i %s" itemCount itemsText
         | JsonValueKind.Object -> "an object"
         | JsonValueKind.Null -> "null"
         | _ -> "something else"
@@ -76,21 +79,11 @@ module DiffMessage =
             match (actual.ValueKind, expected.ValueKind) with 
             | (JsonValueKind.True, JsonValueKind.False) 
             | (JsonValueKind.False, JsonValueKind.True) ->
-                sprintf "Boolean value mismatch at %s.\nExpected %b but was %b." path (expected.GetBoolean()) (actual.GetBoolean()) 
-            | (JsonValueKind.True, _) 
-            | (JsonValueKind.False, _)
-            | (_, JsonValueKind.True) 
-            | (_, JsonValueKind.False) ->
+                sprintf "Boolean value mismatch at %s.\nExpected %b but was %b." path (expected.GetBoolean()) (actual.GetBoolean())
+            | (_, _) -> 
                 let expectedMessage = toValueDescription expected
                 let actualMessage = toValueDescription actual
-                sprintf "Value mismatch at %s.\nExpected %s but was %s." path expectedMessage actualMessage
-            | (JsonValueKind.Null, _) -> 
-                let expectedMessage = toValueDescription expected
-                sprintf "Value mismatch at %s.\nExpected %s but was null." path expectedMessage
-            | (_, JsonValueKind.Null) -> 
-                let actualMessage = toValueDescription actual
-                sprintf "Value mismatch at %s.\nExpected null but was %s." path actualMessage
-            | _ -> sprintf "Some other kind mismatch at %s!" path
+                sprintf "Kind mismatch at %s.\nExpected %s but was %s." path expectedMessage actualMessage
         | ItemCount { Path = path; Left = actual; Right = expected } -> 
             let expectedLength = expected.GetArrayLength()
             let actualLength = actual.GetArrayLength()

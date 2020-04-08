@@ -5,10 +5,10 @@ using Xunit;
 
 namespace Quarrel.CSharp.UnitTests
 {
-    public class Tests
+    public class JsonDiffTests
     {
         [Fact]
-        public void TestOfElements()
+        public void TestOfElementsTrueVsFalse()
         {
             using var d1 = JsonDocument.Parse("true");
             using var d2 = JsonDocument.Parse("false");
@@ -23,7 +23,7 @@ namespace Quarrel.CSharp.UnitTests
         }
 
         [Fact]
-        public void TestOfDocuments()
+        public void TestOfDocumentsTrueVsFalse()
         {
             using var d1 = JsonDocument.Parse("true");
             using var d2 = JsonDocument.Parse("false");
@@ -36,22 +36,16 @@ namespace Quarrel.CSharp.UnitTests
         }
 
         [Fact]
-        public void TestOfStrings()
+        public void TestOfDocuments1Vs2()
         {
-            var diffs = JsonDiff.OfStrings("{}", "{}");
-            Assert.Empty(diffs);
-        }
-        
-        [Fact]
-        public void TestOfStrings2()
-        {
-            var diffs = JsonDiff.OfStrings("1", "2").ToList();
+            using var d1 = JsonDocument.Parse("1");
+            using var d2 = JsonDocument.Parse("2");
+            var diffs = JsonDiff.OfDocuments(d1, d2).ToList();
             Assert.NotEmpty(diffs);
             var valueDiff = (Diff.Value)diffs.Single();
             Assert.Equal("$", valueDiff.Item.Path);
             Assert.Equal(1, valueDiff.Item.Left.GetInt32());
             Assert.Equal(2, valueDiff.Item.Right.GetInt32());
         }
-
     }
 }

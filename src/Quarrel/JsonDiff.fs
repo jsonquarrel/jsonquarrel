@@ -120,6 +120,5 @@ module JsonDiff =
         
     let OfDocuments(d1 : JsonDocument, d2 : JsonDocument) : IEnumerable<Diff> = 
         OfElements(d1.RootElement, d2.RootElement)
-        
 
         

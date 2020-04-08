@@ -12,8 +12,10 @@ module DiffMessage =
         | JsonValueKind.Number -> sprintf "the number %s" (e.GetRawText())
         | JsonValueKind.Array ->
             let itemCount = e.GetArrayLength()
-            let itemsText = if itemCount = 1 then "item" else "items"
-            sprintf "an array with %i %s" itemCount itemsText
+            match itemCount with
+            | 0 -> "an empty array"
+            | 1 -> "an array with 1 item"
+            | _ -> sprintf "an array with %i items" itemCount
         | JsonValueKind.Object -> "an object"
         | JsonValueKind.Null -> "null"
         | _ -> "something else"

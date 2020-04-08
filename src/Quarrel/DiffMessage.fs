@@ -62,7 +62,7 @@ module DiffMessage =
                     let text = if List.length missings = 1 then "property" else "properties"
                     Some <| sprintf "Missing %s:\n%s." text (String.concat "\n" missings)
             let details = [ maybeAdditionalsStr; maybeMissingsStr ] |> List.choose id |> String.concat "\n"
-            sprintf "Property mismatch at %s.\n%s" path details
+            sprintf "Object mismatch at %s.\n%s" path details
         | Value { Path = path; Left = actual; Right = expected } ->
             match actual.ValueKind with 
             | JsonValueKind.String -> 

@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Quarrel.CSharp.UnitTests
 {
-    public class UnitTest1
+    public class Tests
     {
         [Fact]
         public void TestOfElements()
@@ -18,8 +18,8 @@ namespace Quarrel.CSharp.UnitTests
             Assert.NotEmpty(diffs);
             var kindDiff = (Diff.Kind) diffs.Single();
             Assert.Equal("$", kindDiff.Item.Path);
-            Assert.Equal(true, kindDiff.Item.Left.GetBoolean());
-            Assert.Equal(false, kindDiff.Item.Right.GetBoolean());
+            Assert.True(kindDiff.Item.Left.GetBoolean());
+            Assert.False(kindDiff.Item.Right.GetBoolean());
         }
 
         [Fact]
@@ -31,8 +31,8 @@ namespace Quarrel.CSharp.UnitTests
             Assert.NotEmpty(diffs);
             var kindDiff = (Diff.Kind) diffs.Single();
             Assert.Equal("$", kindDiff.Item.Path);
-            Assert.Equal(true, kindDiff.Item.Left.GetBoolean());
-            Assert.Equal(false, kindDiff.Item.Right.GetBoolean());
+            Assert.True(kindDiff.Item.Left.GetBoolean());
+            Assert.False(kindDiff.Item.Right.GetBoolean());
         }
 
         [Fact]
@@ -47,6 +47,10 @@ namespace Quarrel.CSharp.UnitTests
         {
             var diffs = JsonDiff.OfStrings("1", "2").ToList();
             Assert.NotEmpty(diffs);
+            var valueDiff = (Diff.Value)diffs.Single();
+            Assert.Equal("$", valueDiff.Item.Path);
+            Assert.Equal(1, valueDiff.Item.Left.GetInt32());
+            Assert.Equal(2, valueDiff.Item.Right.GetInt32());
         }
 
     }

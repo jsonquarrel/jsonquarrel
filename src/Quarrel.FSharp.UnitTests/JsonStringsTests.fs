@@ -53,6 +53,18 @@ module JsonStringsTests =
         | _ -> failwith "Wrong number of diffs"
 
     [<Fact>]
+    let ``"foo" = "foo"``() = 
+        let diffs = JsonStrings.Diff("\"foo\"", "\"foo\"")
+        Assert.Empty(diffs)
+
+    [<Fact>]
+    let ``"foo" != "bar"``() = 
+        let diffs = JsonStrings.Diff("\"foo\"", "\"bar\"") |> Seq.toList
+        match diffs with
+        | [ diff ] -> Assert.Equal("String value mismatch at $.\nExpected bar but was foo.", diff)
+        | _ -> failwith "Expected 1 diff but was %d." (List.length diffs)
+        
+    [<Fact>]
     let ``null vs 1``() = 
         let diffMessage = JsonStrings.Diff("null", "1") |> Seq.head
         Assert.Equal("Kind mismatch at $.\nExpected the number 1 but was null.", diffMessage)
@@ -97,7 +109,7 @@ module JsonStringsTests =
         | [ diff1; diff2 ] ->
             Assert.Equal("Number value mismatch at $[0].\nExpected 1 but was 2.", diff1)        
             Assert.Equal("Number value mismatch at $[1].\nExpected 2 but was 1.", diff2)
-        | _ -> failwithf "Expected 2 diffs but got %d." (List.length diffs)
+        | _ -> failwithf "Expected 2 diffs but was %d." (List.length diffs)
         
     [<Fact>]
     let ``{} != { "count": 0 }``() =
@@ -113,7 +125,7 @@ module JsonStringsTests =
         match diffs with
         | [ diff ] ->
             Assert.Equal("Object mismatch at $.\nAdditional property:\ncount (number).", diff)        
-        | _ -> failwithf "Expected 1 diff but got %d." (List.length diffs)
+        | _ -> failwithf "Expected 1 diff but was %d." (List.length diffs)
         
     [<Fact>]
     let ``{ "age": 20, "name": "Don" } = { "name": "Don", "age": 20 }``() =

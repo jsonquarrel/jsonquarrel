@@ -3,7 +3,7 @@ namespace Quarrel
 module DiffMessage =
     
     open System.Text.Json
-
+    
     let private toValueDescription (e : JsonElement) : string = 
         match e.ValueKind with 
         | JsonValueKind.True -> "the boolean true"
@@ -43,11 +43,11 @@ module DiffMessage =
             let justAdditional = function
                 | MissingProperty _ -> None 
                 | AdditionalProperty p -> Some p 
-            let additionals = 
+            let additionals : string list = 
                 mismatches 
                 |> List.choose justAdditional
                 |> List.map (propString actual)
-            let missings = 
+            let missings : string list = 
                 mismatches 
                 |> List.choose justMissing
                 |> List.map (propString expected)
@@ -73,7 +73,7 @@ module DiffMessage =
                     if maxStrLen > 30 then 
                         sprintf "Expected\n    %s\nbut was\n    %s" expectedStr actualStr
                     else 
-                        sprintf "Expected %s but was %s" expectedStr actualStr
+                        sprintf "Expected %s but was %s." expectedStr actualStr
                 sprintf "String value mismatch at %s.\n%s" path comparisonStr 
             | JsonValueKind.Number -> sprintf "Number value mismatch at %s.\nExpected %s but was %s." path (expected.GetRawText()) (actual.GetRawText()) 
             | _ -> sprintf "Some other value mismatch at %s." path

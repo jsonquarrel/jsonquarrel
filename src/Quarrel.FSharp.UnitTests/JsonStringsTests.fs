@@ -29,14 +29,19 @@ module JsonStringsTests =
     let ``1000 = 1E3``() = 
         let diffs = JsonStrings.Diff("1000", "1E3")
         Assert.Empty(diffs)
+        
+    [<Fact>]
+    let ``123.4 = 1.234E2``() = 
+        let diffs = JsonStrings.Diff("123.4", "1.234E2")
+        Assert.Empty(diffs)
 
     [<Fact>]
-    let ``1 != 2``() = 
+    let ``1 != 2 : number value mismatch``() = 
         let diffMessage = JsonStrings.Diff("1", "2") |> Seq.head
         Assert.Equal("Number value mismatch at $.\nExpected 2 but was 1.", diffMessage)
         
     [<Fact>]
-    let ``1 != 1E1``() = 
+    let ``1 != 1E1 : number value mismatch``() = 
         let diffMessage = JsonStrings.Diff("1", "1E1") |> Seq.head
         Assert.Equal("Number value mismatch at $.\nExpected 1E1 but was 1.", diffMessage)
         
@@ -46,7 +51,7 @@ module JsonStringsTests =
         Assert.Empty(diffs)
 
     [<Fact>]
-    let ``true vs 1``() =
+    let ``true != 1 : Kind mismatch``() =
         let diffs = JsonStrings.Diff("true", "1") |> Seq.toList
         match diffs with
         | [ diff ] -> Assert.Equal("Kind mismatch at $.\nExpected the number 1 but was the boolean true.", diff)
@@ -62,7 +67,7 @@ module JsonStringsTests =
         let diffs = JsonStrings.Diff("\"foo\"", "\"bar\"") |> Seq.toList
         match diffs with
         | [ diff ] -> Assert.Equal("String value mismatch at $.\nExpected bar but was foo.", diff)
-        | _ -> failwith "Expected 1 diff but was %d." (List.length diffs)
+        | _ -> failwithf "Expected 1 diff but was %d." (List.length diffs)
         
     [<Fact>]
     let ``null vs 1``() = 
@@ -96,7 +101,7 @@ module JsonStringsTests =
         | _ -> failwith "Wrong number of diffs"
 
     [<Fact>]
-    let ``[ 1 ] vs [ 2, 1 ]``() = 
+    let ``[ 1 ] != [ 2, 1 ] : array length mismatch``() = 
         let diffs = JsonStrings.Diff("[ 1 ]", "[ 2, 1 ]") |> Seq.toList
         match diffs with
         | [ diffMessage ] -> Assert.Equal("Array length mismatch at $.\nExpected 2 items but was 1.", diffMessage)
@@ -131,3 +136,13 @@ module JsonStringsTests =
     let ``{ "age": 20, "name": "Don" } = { "name": "Don", "age": 20 }``() =
         let diffs = JsonStrings.Diff("{ \"age\": 20, \"name\": \"Don\" }", "{ \"name\": \"Don\", \"age\": 20 }")
         Assert.Empty(diffs)
+        
+    [<Fact>]
+    let ``Compare object with array``() =
+        let s1 = "{ \"my array\": [ 1, 2, 3 ] }"
+        let s2 = "{ \"my array\": [ 1, 2, 4 ] }"
+        let diffs = JsonStrings.Diff(s1, s2) |> Seq.toList
+        match diffs with
+        | [ diff ] ->
+            Assert.Equal("Number value mismatch at $['my array'][2].\nExpected 4 but was 3.", diff)        
+        | _ -> failwithf "Expected 1 diff but was %d." (List.length diffs)

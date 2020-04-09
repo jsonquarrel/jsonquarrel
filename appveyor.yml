@@ -1,0 +1,10 @@
+version: '1.0.{build}'
+configuration:
+- Release
+platform: Any CPU
+before_build:
+- dotnet restore -v Minimal
+build_script:
+- dotnet build
+test_script:
+- dotnet test

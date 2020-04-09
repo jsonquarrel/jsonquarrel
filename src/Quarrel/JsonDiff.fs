@@ -104,9 +104,17 @@ module JsonDiff =
                 let childDiffs = sharedKeys |> List.collect propDiff
                 objectDiff @ childDiffs
             | JsonValueKind.Number ->
-                let rawText1 = element1.GetRawText()
-                let rawText2 = element2.GetRawText()
-                if rawText1 = rawText2 then []
+                let representsSameInt32 (el1 : JsonElement) (el2 : JsonElement) : bool =
+                    match (el1.TryGetInt32(), el2.TryGetInt32()) with
+                    | ((true, n1), (true, n2)) -> n1 = n2
+                    | _ -> false
+                let representsSameDouble (el1 : JsonElement) (el2 : JsonElement) : bool =
+                    match (el1.TryGetDouble(), el2.TryGetDouble()) with
+                    | ((true, n1), (true, n2)) -> n1 = n2
+                    | _ -> false
+                let representsSameNumber (el1 : JsonElement) (el2 : JsonElement) : bool =
+                    representsSameInt32 el1 el2 || representsSameDouble el1 el2
+                if representsSameNumber element1 element2 then []
                 else [ Value { Path = toJsonPath path; Left = element1; Right = element2 } ]
             | JsonValueKind.String ->
                 let string1 = element1.GetString()

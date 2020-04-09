@@ -58,7 +58,7 @@ namespace Quarrel.CSharp.UnitTests
         {
             var diffMessages = JsonStrings.Diff("[]", "1");
             var diffMessage = diffMessages.Single();
-            Assert.Equal("Kind mismatch at $.\nExpected the number 1 but was an array with 0 items.", diffMessage);
+            Assert.Equal("Kind mismatch at $.\nExpected the number 1 but was an empty array.", diffMessage);
         }
         
         [Fact]

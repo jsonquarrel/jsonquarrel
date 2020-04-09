@@ -7,6 +7,7 @@ before_build:
 - dotnet restore -v Minimal
 build_script:
 - dotnet build
+- dotnet pack --no-build
 test_script:
 - dotnet test
 deploy:

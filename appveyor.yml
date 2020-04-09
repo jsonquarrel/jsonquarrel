@@ -3,6 +3,7 @@ configuration:
 - Release
 platform: Any CPU
 before_build:
+- dotnet tool restore
 - dotnet restore -v Minimal
 build_script:
 - dotnet build
